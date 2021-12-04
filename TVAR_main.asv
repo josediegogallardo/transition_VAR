@@ -27,4 +27,5 @@ results = non_linear_test(y,nlag,lags2check,test_type,trans_var);
 
 lags2tab = 1:1:lags2check;
 res = [lags2tab' results.LMtests, results.LRtests'];
-disp(res)
+head_tab = {'Lag','Var1','Var2','Var3','Var4','Var5','Var6','LR'};
+tab_res  = table('Size',[6 8],'VariableNames',head_tab);

@@ -23,15 +23,17 @@ results.nlag = nlag; % # of lags in VAR(p)
 lags2check = lags2check;
 results.lags2check = lags2check; % # of lags to test non-linearity
 
-if test_type == 1
+LRtests=zeros(1,lags2check);
+fstat_pval=zeros(lags2check,neqs);
 
-    
-elseif test_type == 2
-   performar test exogeno
-elseif test_type == 3
-   performar test independiente
-else
-   disp('Invalid type of test') 
+for i=1:lags2check
+    tests = tvar_tests(y,nlag,i,test_type,trans_var);
+    LRtests(1,i)     = tests.LRpval    ;
+    fstat_pval(i,1:neqs)  = tests.fstat_pval;
+end
+
+results.LRtests=LRtests;
+results.LMtests=fstat_pval; 
 end
     
 

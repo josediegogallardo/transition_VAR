@@ -4,20 +4,49 @@ function results = tvar_tests(y,nlag,transilag,test_type,trans_var)
 
 nvar = 2*nlag*neqs+2*1; % # of variables per equation
 
-nx = 0;
 
-%Building the Smooth Transition Function
-transi   = y(:,trans_var);
-transi   = lag(transi,transilag);
-g        = transi;
 
 %Building the non-linear data
 gy=[];
 ylag=mlag(y,nlag);
 
-for i=1:neqs*nlag
-    gy=[gy g.*ylag(:,i)];
-end
+if test_type == 1
+    % Exogenous # var
+    nx = 0;
+    % Building the Smooth Transition Function
+    transi   = y(:,trans_var);
+    transi   = lag(transi,transilag);
+    g        = transi;
+    % Non linear subsistem to test
+    for i=1:neqs*nlag
+        gy=[gy g.*ylag(:,i)];
+    end
+elseif test_type == 2
+    % Exogenous # var
+    nx = 1;
+    % Building the Smooth Transition Function
+    transi   = trans_var;
+    transi   = lag(transi,transilag);
+    g        = transi;
+    % Non linear subsistem to test
+    for i=1:neqs*nlag
+        gy=[gy g.*ylag(:,i)];
+    end
+    gy=[gy trans_var];
+elseif test_type == 3
+    % Exogenous # var
+    nx = 0;
+    % Building the Smooth Transition Function
+    transi   = trans_var;
+    transi   = lag(transi,transilag);
+    g        = transi;
+    % Non linear subsistem to test
+    for i=1:neqs*nlag
+        gy=[gy g.*ylag(:,i)];
+    end
+else
+    disp('Invalid test type')
+end 
 
 varres=vare2(y,nlag,gy);
     
@@ -64,14 +93,16 @@ for i=1:neqs
     SSR1=sum(res_ur(:,i).^2);
     FStat_eq(i)=((SSR0-SSR1)/(nlag*neqs))/((SSR1/((nobs-nlag)-(2*nlag*neqs+1))));%calculate small sample F-Statistic
 end;
-results.fstat=FStat_eq;
+
 
 pval=1-fdis_prb(FStat_eq,nlag*neqs,(nobs-nlag)-(2*nlag*neqs+1));        %calculate corresponding p-value
-results.fstat_pval=pval;
+
 
 %% Registering Results
 results.omega0=omega0   ;
-results.omega1=omega1   ;      
+results.omega1=omega1   ;
+results.fstat=FStat_eq;
+results.fstat_pval=pval;
 results.LR=LR           ;
 results.LRpval=LRpval   ;
 results.beta=b  ;
