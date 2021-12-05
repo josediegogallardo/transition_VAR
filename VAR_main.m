@@ -22,7 +22,8 @@ VAR_lineal = estimateVAR(y, p, c, exo_data);
 
 %% GIRF
 var_results          = VAR_lineal; % Results from linear VAR for bootstrap
-IRper                = 24; % Horizonts for IRF's
+IR.per               = 24; % Horizonts for IRF's
+IR.shocktype         = 0; % % one unit shock 
 shockv               = 4; % Position of Endogenous variable to be shocked
 GIRF_opt.sim         = 500; % Number of simulations
 GIRF_opt.shock       = 1; % Shock size and sign
@@ -30,4 +31,4 @@ GIRF_opt.hist        = []; % No history
 %GIRF_opt.hist.var    = 2; % Posittion of variable in estimateVAR.X for history dependence
 %GIRF_opt.hist.thresh = 0.0; % Threshold to mark history or anothe
 
-GIRF = GIRF_chol(var_results, IRper, shockv, GIRF_opt);
+GIRF = GIRF_chol(var_results, IR, shockv, GIRF_opt);
