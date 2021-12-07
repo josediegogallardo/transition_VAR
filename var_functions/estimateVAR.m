@@ -1,6 +1,6 @@
 function [VAR] = estimateVAR(data, p, c_case, exdata)
 %% Reference
-% Function from macroeconometric toolbox by Gabriel Züllig
+% Function from macroeconometric toolbox by Gabriel Züellig
 
 % Prep
 t = size(data, 1);
@@ -29,11 +29,12 @@ else
 end
 % add exogenous variables
 if ~isempty(exdata)
-    Xex = [];
-    for pp = 1:p
-        Xex = [Xex, [NaN*ones(pp, size(exdata,2)); exdata(1:end-pp,:)]  ];
-    end
-    Xex = Xex(p+1:end,:);
+    % To add dynamics to exogenous
+    %Xex = [];
+    %for pp = 1:p
+    %    Xex = [Xex, [NaN*ones(pp, size(exdata,2)); exdata(1:end-pp,:)]  ];
+    %end
+    Xex = exdata(p+1:end,:);
 else
     Xex = [];
 end
